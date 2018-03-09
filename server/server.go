@@ -27,6 +27,7 @@ func NewServer(cfg *config.Config) *Server {
 		cfg:       cfg,
 		wxMiniMap: make(map[string]*WxMiniInfo),
 	}
+	s.init()
 
 	return s
 }
