@@ -9,14 +9,10 @@ type Session struct {
 	UserId   int64               `json:"user_id"`
 }
 
-type SessionData struct {
+type LoginResponse struct {
 	Magic   int      `json:"F2C224D4-2BCE-4C64-AF9F-A6D872000D1A"`
 	Session *Session `json:"session,omitempty"`
 	Message string   `json:"message,omitempty"`
-}
-
-type LoginResponse struct {
-	Data SessionData `json:"data"`
 }
 
 type UserInfo struct {

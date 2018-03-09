@@ -16,7 +16,7 @@ func (s *Server) home(c *gin.Context) {
 
 func (s *Server) login(c *gin.Context) {
 	rsp := &LoginResponse{}
-	rsp.Data.Magic = 1
+	rsp.Magic = 1
 
 	defer func() {
 		c.JSON(http.StatusOK, rsp)
@@ -29,7 +29,7 @@ func (s *Server) login(c *gin.Context) {
 
 	if code == "" || encryptedData == "" || iv == "" || appid == "" {
 		holmes.Error("code, encryptedData, iv, appid cannot be nil")
-		rsp.Data.Message = ERR_MSG_PARAMS
+		rsp.Message = ERR_MSG_PARAMS
 		return
 	}
 
@@ -41,12 +41,12 @@ func (s *Server) login(c *gin.Context) {
 		has, err := models.GetAppInfo(appinfo)
 		if err != nil {
 			holmes.Error("get appinfo error: %v", err)
-			rsp.Data.Message = ERR_MSG_SYSTEM
+			rsp.Message = ERR_MSG_SYSTEM
 			return
 		}
 		if !has {
 			holmes.Error("cannot found this appid: %s", appinfo)
-			rsp.Data.Message = ERR_MSG_SYSTEM
+			rsp.Message = ERR_MSG_SYSTEM
 			return
 		}
 		wxMini = s.addWxMini(appinfo)
@@ -55,14 +55,14 @@ func (s *Server) login(c *gin.Context) {
 	session, err := wxMini.WxMini.GetWxSessionKey(code)
 	if err != nil {
 		holmes.Error("get wx session key error: %v", err)
-		rsp.Data.Message = ERR_MSG_GET_SESSION
+		rsp.Message = ERR_MSG_GET_SESSION
 		return
 	}
 
 	userinfo, err := small.GetWxUserInfo(session.SessionKey, encryptedData, iv)
 	if err != nil {
 		holmes.Error("get wx user info error: %v", err)
-		rsp.Data.Message = ERR_MSG_GET_USER_INFO
+		rsp.Message = ERR_MSG_GET_USER_INFO
 		return
 	}
 
@@ -73,7 +73,7 @@ func (s *Server) login(c *gin.Context) {
 	has, err := models.GetSessionInfo(sessionInfo)
 	if err != nil {
 		holmes.Error("get session info error: %v", err)
-		rsp.Data.Message = ERR_MSG_SYSTEM
+		rsp.Message = ERR_MSG_SYSTEM
 		return
 	}
 	if !has {
@@ -88,12 +88,12 @@ func (s *Server) login(c *gin.Context) {
 		err = models.CreateSessionInfo(sessionInfo)
 		if err != nil {
 			holmes.Error("create session info error: %v", err)
-			rsp.Data.Message = ERR_MSG_SYSTEM
+			rsp.Message = ERR_MSG_SYSTEM
 			return
 		}
 	}
 
-	rsp.Data.Session = &Session{UserInfo: sessionInfo, UserId: sessionInfo.ID}
+	rsp.Session = &Session{UserInfo: sessionInfo, UserId: sessionInfo.ID}
 }
 
 func (s *Server) getUserInfo(c *gin.Context) {
