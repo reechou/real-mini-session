@@ -4,6 +4,7 @@ import (
 	"github.com/reechou/real-mini-session/models"
 )
 
+// session login
 type Session struct {
 	UserInfo *models.SessionInfo `json:"userInfo"`
 	UserId   int64               `json:"user_id"`
@@ -23,4 +24,16 @@ type Response struct {
 	Code int         `json:"code"`
 	Data interface{} `json:"data,omitempty"`
 	Msg  string      `json:"msg"`
+}
+
+// list proto
+type CreateListReq struct {
+	UserId int64    `json:"userId"`
+	Name   string   `json:"name"`
+	Tags   []string `json:"tags"`
+}
+
+type OprTaskReq struct {
+	Task    models.Task `json:"task"`
+	Members []int64     `json:"members"`
 }

@@ -59,5 +59,10 @@ func (s *Server) Run() {
 	router.GET("/mini/login", s.login)
 	router.GET("/mini/user", s.getUserInfo)
 
+	// event list
+	router.POST("/list/create", s.createList)
+	router.GET("/list/del/:id", s.delList)
+	router.GET("/list/get/:userid", s.getList)
+
 	holmes.Infoln(router.Run(s.cfg.Host))
 }
