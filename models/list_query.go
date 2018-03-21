@@ -1,5 +1,16 @@
 package models
 
+func GetList(info *List) (bool, error) {
+	has, err := x.Id(info.ID).Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
 func GetListTags(listId int64) ([]ListTag, error) {
 	var listTags []ListTag
 	err := x.Where("list_id = ?", listId).Find(&listTags)

@@ -33,3 +33,44 @@ func (s *Server) getList(c *gin.Context) {
 	}
 	rsp.Data = list
 }
+
+func (s *Server) getListDetail(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	response := new(ListDetailRsp)
+	response.List.ID = id
+
+	has, err := models.GetList(&response.List)
+	if err != nil {
+		holmes.Error("get list detail error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if !has {
+		rsp.Code = ERR_CODE_NOT_FOUND
+		rsp.Msg = ERR_MSG_NOT_FOUND
+		return
+	}
+
+	response.Tags, err = models.GetListTags(id)
+	if err != nil {
+		holmes.Error("get list tags error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = response
+}

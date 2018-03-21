@@ -63,6 +63,7 @@ func (s *Server) Run() {
 	router.POST("/list/save", s.saveList)
 	router.GET("/list/del/:id", s.delList)
 	router.GET("/list/get/:userid", s.getList)
+	router.GET("/list/detail/:id", s.getListDetail)
 
 	holmes.Infoln(router.Run(s.cfg.Host))
 }

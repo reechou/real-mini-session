@@ -36,3 +36,8 @@ type OprTaskReq struct {
 	Task    models.Task `json:"task"`
 	Members []int64     `json:"members"`
 }
+
+type ListDetailRsp struct {
+	List models.List      `json:"list"`
+	Tags []models.ListTag `json:"tags"`
+}
