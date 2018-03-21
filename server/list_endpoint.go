@@ -159,6 +159,7 @@ func (s *Server) saveListEvent(c *gin.Context) {
 			return
 		}
 	}
+	rsp.Data = req
 }
 
 func (s *Server) delListEvent(c *gin.Context) {
