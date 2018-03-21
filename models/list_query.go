@@ -10,8 +10,8 @@ func GetListTags(listId int64) ([]ListTag, error) {
 }
 
 type ListEvent struct {
-	List  `xorm:"extends"`
-	Event `xorm:"extends"`
+	List  `xorm:"extends" json:"list"`
+	Event `xorm:"extends" json:"event"`
 }
 
 func (ListEvent) TableName() string {
