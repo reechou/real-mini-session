@@ -41,6 +41,12 @@ func DelList(info *List) error {
 	return nil
 }
 
+func UpdateList(info *List) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("name", "updated_at").Update(info)
+	return err
+}
+
 type ListTag struct {
 	ID        int64  `xorm:"pk autoincr" json:"id"`
 	UserId    int64  `xorm:"not null default 0 int index" json:"userId"`

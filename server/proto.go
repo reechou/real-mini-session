@@ -27,10 +27,9 @@ type Response struct {
 }
 
 // list proto
-type CreateListReq struct {
-	UserId int64    `json:"userId"`
-	Name   string   `json:"name"`
-	Tags   []string `json:"tags"`
+type OprListReq struct {
+	List models.List `json:"list"`
+	Tags []string    `json:"tags"`
 }
 
 type OprTaskReq struct {

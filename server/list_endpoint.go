@@ -11,13 +11,13 @@ import (
 	"github.com/reechou/real-mini-session/models"
 )
 
-func (s *Server) createList(c *gin.Context) {
+func (s *Server) saveList(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
 		c.JSON(http.StatusOK, rsp)
 	}()
 
-	var req CreateListReq
+	var req OprListReq
 	if err := c.ShouldBindJSON(&req); err != nil {
 		holmes.Error("bind json error: %v", err)
 		rsp.Code = ERR_CODE_PARAMS
@@ -25,29 +25,77 @@ func (s *Server) createList(c *gin.Context) {
 		return
 	}
 
-	list := &models.List{
-		UserId: req.UserId,
-		Name:   req.Name,
-	}
-	err := models.CreateList(list)
-	if err != nil {
-		holmes.Error("create list error: %v", err)
-		rsp.Code = ERR_CODE_SYSTEM
-		rsp.Msg = ERR_MSG_SYSTEM
-		return
-	}
-	listTags := make([]models.ListTag, len(req.Tags))
-	for i := 0; i < len(req.Tags); i++ {
-		listTags[i].UserId = req.UserId
-		listTags[i].ListId = list.ID
-		listTags[i].Name = req.Tags[i]
-	}
-	err = models.CreateListTags(listTags)
-	if err != nil {
-		holmes.Error("create list tags error: %v", err)
-		rsp.Code = ERR_CODE_SYSTEM
-		rsp.Msg = ERR_MSG_SYSTEM
-		return
+	var err error
+	if req.List.ID == 0 {
+		if err = models.CreateList(&req.List); err != nil {
+			holmes.Error("create list error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+		listTags := make([]models.ListTag, len(req.Tags))
+		for i := 0; i < len(req.Tags); i++ {
+			listTags[i].UserId = req.List.UserId
+			listTags[i].ListId = req.List.ID
+			listTags[i].Name = req.Tags[i]
+		}
+		err = models.CreateListTags(listTags)
+		if err != nil {
+			holmes.Error("create list tags error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+	} else {
+		if err = models.UpdateList(&req.List); err != nil {
+			holmes.Error("update list error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+		tags, err := models.GetListTags(req.List.ID)
+		if err != nil {
+			holmes.Error("get list tags error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+		newTags := make(map[string]bool)
+		for i := 0; i < len(req.Tags); i++ {
+			newTags[req.Tags[i]] = true
+		}
+		oldTags := make(map[string]*models.ListTag)
+		for i := 0; i < len(tags); i++ {
+			oldTags[tags[i].Name] = &tags[i]
+		}
+		listTags := make([]models.ListTag, 0)
+		for k, _ := range newTags {
+			if _, ok := oldTags[k]; !ok {
+				listTags = append(listTags, models.ListTag{
+					UserId: req.List.UserId,
+					ListId: req.List.ID,
+					Name:   k,
+				})
+			}
+		}
+		if len(listTags) != 0 {
+			if err = models.CreateListTags(listTags); err != nil {
+				holmes.Error("create list tags error: %v", err)
+				rsp.Code = ERR_CODE_SYSTEM
+				rsp.Msg = ERR_MSG_SYSTEM
+				return
+			}
+		}
+		for k, v := range oldTags {
+			if _, ok := newTags[k]; !ok {
+				if err = models.DelListTag(v); err != nil {
+					holmes.Error("del list tag error: %v", err)
+					rsp.Code = ERR_CODE_SYSTEM
+					rsp.Msg = ERR_MSG_SYSTEM
+					return
+				}
+			}
+		}
 	}
 }
 

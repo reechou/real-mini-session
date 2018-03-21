@@ -60,7 +60,7 @@ func (s *Server) Run() {
 	router.GET("/mini/user", s.getUserInfo)
 
 	// event list
-	router.POST("/list/create", s.createList)
+	router.POST("/list/save", s.saveList)
 	router.GET("/list/del/:id", s.delList)
 	router.GET("/list/get/:userid", s.getList)
 

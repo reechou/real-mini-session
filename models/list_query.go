@@ -1,5 +1,14 @@
 package models
 
+func GetListTags(listId int64) ([]ListTag, error) {
+	var listTags []ListTag
+	err := x.Where("list_id = ?", listId).Find(&listTags)
+	if err != nil {
+		return nil, err
+	}
+	return listTags, nil
+}
+
 type ListEvent struct {
 	List  `xorm:"extends"`
 	Event `xorm:"extends"`
