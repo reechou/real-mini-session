@@ -74,3 +74,29 @@ func (s *Server) getListDetail(c *gin.Context) {
 	}
 	rsp.Data = response
 }
+
+// list event
+func (s *Server) getListEvents(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	listIdStr := c.Param("listid")
+	listId, err := strconv.ParseInt(listIdStr, 0, 10)
+	if err != nil {
+		holmes.Error("list id str[%s] error", listIdStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	events, err := models.GetListEvents(listId)
+	if err != nil {
+		holmes.Error("get list event error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = events
+}

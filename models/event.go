@@ -42,6 +42,12 @@ func DelEvent(info *Event) error {
 	return nil
 }
 
+func UpdateEvent(info *Event) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("name", "updated_at").Update(info)
+	return err
+}
+
 type EventMember struct {
 	ID        int64 `xorm:"pk autoincr"`
 	EventId   int64 `xorm:"not null default 0 int unique(task_member)" json:"eventId"`

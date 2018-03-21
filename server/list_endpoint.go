@@ -121,7 +121,8 @@ func (s *Server) delList(c *gin.Context) {
 	}
 }
 
-func (s *Server) createListEvent(c *gin.Context) {
+// list event
+func (s *Server) saveListEvent(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
 		c.JSON(http.StatusOK, rsp)
@@ -135,21 +136,50 @@ func (s *Server) createListEvent(c *gin.Context) {
 		return
 	}
 
-	err := models.CreateEvent(&req)
+	var err error
+	if req.ID == 0 {
+		if err = models.CreateEvent(&req); err != nil {
+			holmes.Error("create event error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+
+		eventMember := &models.EventMember{
+			EventId: req.ID,
+			UserId:  req.OwnerUserId,
+		}
+		if err = models.CreateEventMember(eventMember); err != nil {
+			holmes.Error("create event member error: %v", err)
+		}
+	} else {
+		if err = models.UpdateEvent(&req); err != nil {
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+	}
+}
+
+func (s *Server) delListEvent(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
 	if err != nil {
-		holmes.Error("create event error: %v", err)
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if err = models.DelEvent(&models.Event{ID: id}); err != nil {
+		holmes.Error("del event from id error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
-	}
-
-	eventMember := &models.EventMember{
-		EventId: req.ID,
-		UserId:  req.OwnerUserId,
-	}
-	err = models.CreateEventMember(eventMember)
-	if err != nil {
-		holmes.Error("create event member error: %v", err)
 	}
 }
 
@@ -176,6 +206,7 @@ func (s *Server) createListEventMember(c *gin.Context) {
 	}
 }
 
+// list event task
 func (s *Server) oprTask(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
