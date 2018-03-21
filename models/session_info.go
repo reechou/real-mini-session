@@ -7,7 +7,7 @@ import (
 )
 
 type SessionInfo struct {
-	ID         int64  `xorm:"pk autoincr"`
+	ID         int64  `xorm:"pk autoincr" json:"id"`
 	AppId      int64  `xorm:"not null default 0 int unique(user)" json:"-"`
 	OpenId     string `xorm:"not null default '' varchar(128) unique(user)" json:"openId"`
 	UnionId    string `xorm:"not null default '' varchar(128)" json:"unionId"`
