@@ -208,6 +208,11 @@ func (s *Server) createListEventMember(c *gin.Context) {
 }
 
 // list event task
+const (
+	TASK_STATUS_NOT_DONE = iota
+	TASK_STATUS_DONE
+)
+
 func (s *Server) saveTask(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
@@ -319,6 +324,50 @@ func (s *Server) delTask(c *gin.Context) {
 	}
 	if err = models.DelTask(&models.Task{ID: id}); err != nil {
 		holmes.Error("del task from id error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+}
+
+func (s *Server) doneTask(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if err = models.UpdateTask(&models.Task{ID: id, Status: TASK_STATUS_DONE}); err != nil {
+		holmes.Error("update task error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+}
+
+func (s *Server) reopenTask(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if err = models.UpdateTask(&models.Task{ID: id, Status: TASK_STATUS_NOT_DONE}); err != nil {
+		holmes.Error("update task error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return

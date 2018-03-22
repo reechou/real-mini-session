@@ -16,6 +16,7 @@ type Task struct {
 	Time       string `xorm:"not null default '' varchar(128)" json:"time"`
 	RemindTime int64  `xorm:"not null default 0 int index" json:"remindTime"`
 	Note       string `xorm:"not null default '' varchar(512)" json:"note"`
+	Status     int64  `xorm:"not null default 0 int index" json:"status"`
 	CreatedAt  int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt  int64  `xorm:"not null default 0 int" json:"-"`
 }
@@ -49,6 +50,12 @@ func DelTask(info *Task) error {
 func UpdateTask(info *Task) error {
 	info.UpdatedAt = time.Now().Unix()
 	_, err := x.ID(info.ID).Cols("name", "date", "time", "remind_time", "note", "updated_at").Update(info)
+	return err
+}
+
+func UpdateTaskStatus(info *Task) error {
+	info.UpdatedAt = time.Now().Unix()
+	_, err := x.ID(info.ID).Cols("status", "updated_at").Update(info)
 	return err
 }
 

@@ -72,6 +72,8 @@ func (s *Server) Run() {
 	router.POST("/task/save", s.saveTask)
 	router.GET("/task/del/:id", s.delTask)
 	router.GET("/task/detail/:id", s.getTaskDetail)
+	router.GET("/task/done/:id", s.doneTask)
+	router.GET("/task/reopen/:id", s.reopenTask)
 
 	holmes.Infoln(router.Run(s.cfg.Host))
 }
