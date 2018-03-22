@@ -41,3 +41,8 @@ type ListDetailRsp struct {
 	List models.List      `json:"list"`
 	Tags []models.ListTag `json:"tags"`
 }
+
+type TaskDetailRsp struct {
+	Task    models.Task               `json:"task"`
+	Members []models.TaskMemberDetail `json:"members"`
+}

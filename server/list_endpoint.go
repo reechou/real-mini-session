@@ -208,7 +208,7 @@ func (s *Server) createListEventMember(c *gin.Context) {
 }
 
 // list event task
-func (s *Server) oprTask(c *gin.Context) {
+func (s *Server) saveTask(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
 		c.JSON(http.StatusOK, rsp)
@@ -257,5 +257,70 @@ func (s *Server) oprTask(c *gin.Context) {
 			rsp.Msg = ERR_MSG_SYSTEM
 			return
 		}
+		members, err := models.GetTaskMemberList(req.Task.ID)
+		if err != nil {
+			holmes.Error("get task member list error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
+		newMembers := make(map[int64]bool)
+		for i := 0; i < len(req.Members); i++ {
+			newMembers[req.Members[i]] = true
+		}
+		oldMembers := make(map[int64]*models.TaskMember)
+		for i := 0; i < len(members); i++ {
+			oldMembers[members[i].UserId] = &members[i]
+		}
+		newAddMembers := make([]models.TaskMember, 0)
+		for k, _ := range newMembers {
+			if _, ok := oldMembers[k]; !ok {
+				newAddMembers = append(newAddMembers, models.TaskMember{
+					TaskId: req.Task.ID,
+					UserId: k,
+				})
+			}
+		}
+		if len(newAddMembers) != 0 {
+			err = models.CreateTaskMembers(newAddMembers)
+			if err != nil {
+				holmes.Error("create task members error: %v", err)
+				rsp.Code = ERR_CODE_SYSTEM
+				rsp.Msg = ERR_MSG_SYSTEM
+				return
+			}
+		}
+		for k, v := range oldMembers {
+			if _, ok := newMembers[k]; !ok {
+				if err := models.DelTaskMember(v); err != nil {
+					holmes.Error("del task members error: %v", err)
+					rsp.Code = ERR_CODE_SYSTEM
+					rsp.Msg = ERR_MSG_SYSTEM
+					return
+				}
+			}
+		}
+	}
+}
+
+func (s *Server) delTask(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if err = models.DelTask(&models.Task{ID: id}); err != nil {
+		holmes.Error("del task from id error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
 	}
 }

@@ -10,6 +10,7 @@ import (
 type Task struct {
 	ID         int64  `xorm:"pk autoincr" json:"id"`
 	ListId     int64  `xorm:"not null default 0 int index" json:"listId"`
+	CreateUser int64  `xorm:"not null default 0 int" json:"createUser"`
 	Name       string `xorm:"not null default '' varchar(128)" json:"name"`
 	Date       string `xorm:"not null default '' varchar(128)" json:"date"`
 	Time       string `xorm:"not null default '' varchar(128)" json:"time"`
@@ -86,6 +87,17 @@ func CreateTaskMembers(list []TaskMember) error {
 	_, err := x.Insert(&list)
 	if err != nil {
 		holmes.Error("create task member list error: %v", err)
+		return err
+	}
+	return nil
+}
+
+func DelTaskMember(info *TaskMember) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
 		return err
 	}
 	return nil
