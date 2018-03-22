@@ -21,8 +21,8 @@ func GetTaskMemberList(taskId int64) ([]TaskMember, error) {
 }
 
 type TaskMemberDetail struct {
-	TaskMember  `xorm:"extends"`
-	SessionInfo `xorm:"extends"`
+	TaskMember  `xorm:"extends" json:"taskMember"`
+	SessionInfo `xorm:"extends" json:"user"`
 }
 
 func (TaskMemberDetail) TableName() string {
