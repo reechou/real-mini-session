@@ -4,6 +4,7 @@
       <w>appinfo</w>
       <w>eventid</w>
       <w>listid</w>
+      <w>taskid</w>
     </words>
   </dictionary>
 </component>

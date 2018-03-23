@@ -68,13 +68,14 @@ func (s *Server) Run() {
 	router.POST("/event/save", s.saveListEvent)
 	router.GET("/event/del/:id", s.delListEvent)
 	router.GET("/event/get/:listid", s.getListEvents)
-	router.GET("/event/members/:id", s.getListEventMembers)
 	// task
 	router.POST("/task/save", s.saveTask)
 	router.GET("/task/del/:id", s.delTask)
 	router.GET("/task/detail/:id", s.getTaskDetail)
 	router.GET("/task/done/:id", s.doneTask)
 	router.GET("/task/reopen/:id", s.reopenTask)
+
+	router.GET("/event_task/members/:eventid/:taskid", s.getEventTaskMembers)
 
 	holmes.Infoln(router.Run(s.cfg.Host))
 }

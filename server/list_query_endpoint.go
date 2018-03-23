@@ -101,29 +101,45 @@ func (s *Server) getListEvents(c *gin.Context) {
 	rsp.Data = events
 }
 
-func (s *Server) getListEventMembers(c *gin.Context) {
+func (s *Server) getEventTaskMembers(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
 		c.JSON(http.StatusOK, rsp)
 	}()
 
-	idStr := c.Param("id")
-	id, err := strconv.ParseInt(idStr, 0, 10)
+	eventIdStr := c.Param("eventid")
+	eventId, err := strconv.ParseInt(eventIdStr, 0, 10)
 	if err != nil {
-		holmes.Error("event id str[%s] error", idStr)
+		holmes.Error("event id str[%s] error", eventIdStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	taskIdStr := c.Param("taskid")
+	taskId, err := strconv.ParseInt(taskIdStr, 0, 10)
+	if err != nil {
+		holmes.Error("task id str[%s] error", taskIdStr)
 		rsp.Code = ERR_CODE_PARAMS
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
 
-	members, err := models.GetEventMemberDetailList(id)
+	membersRsp := new(EventTaskMembersRsp)
+	membersRsp.EventMembers, err = models.GetEventMemberDetailList(eventId)
 	if err != nil {
-		holmes.Error("get list event members error: %v", err)
+		holmes.Error("get event members error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
-	rsp.Data = members
+	membersRsp.TaskMembers, err = models.GetTaskMemberDetailList(taskId)
+	if err != nil {
+		holmes.Error("get task members error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = membersRsp
 }
 
 // list event task

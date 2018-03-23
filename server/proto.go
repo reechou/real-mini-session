@@ -46,3 +46,8 @@ type TaskDetailRsp struct {
 	Task    models.Task               `json:"task"`
 	Members []models.TaskMemberDetail `json:"members"`
 }
+
+type EventTaskMembersRsp struct {
+	EventMembers []models.EventMemberDetail `json:"eventMembers"`
+	TaskMembers  []models.TaskMemberDetail  `json:"taskMembers"`
+}
