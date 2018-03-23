@@ -366,7 +366,7 @@ func (s *Server) reopenTask(c *gin.Context) {
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
-	if err = models.UpdateTask(&models.Task{ID: id, Status: TASK_STATUS_NOT_DONE}); err != nil {
+	if err = models.UpdateTaskStatus(&models.Task{ID: id, Status: TASK_STATUS_NOT_DONE}); err != nil {
 		holmes.Error("update task error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
