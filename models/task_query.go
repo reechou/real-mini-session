@@ -39,3 +39,25 @@ func GetTaskMemberDetailList(taskId int64) ([]TaskMemberDetail, error) {
 	}
 	return taskMemberDetailList, nil
 }
+
+type TaskInfoDetail struct {
+	Task        `xorm:"extends" json:"task"`
+	TaskMember  `xorm:"extends" json:"taskMember"`
+	SessionInfo `xorm:"extends" json:"user"`
+}
+
+func (TaskInfoDetail) TableName() string {
+	return "task"
+}
+
+func GetTaskInfoDetailList(eventId int64) ([]TaskInfoDetail, error) {
+	taskList := make([]TaskInfoDetail, 0)
+	err := x.Join("LEFT", "task_member", "task.id = task_member.task_id").
+		Join("LEFT", "session_info", "task_member.user_id = session_info.id").
+		Where("task.event_id = ?", eventId).
+		Find(&taskList)
+	if err != nil {
+		return nil, err
+	}
+	return taskList, nil
+}

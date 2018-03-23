@@ -102,6 +102,31 @@ func (s *Server) getListEvents(c *gin.Context) {
 }
 
 // list event task
+func (s *Server) getEventTasks(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	eventIdStr := c.Param("eventid")
+	eventId, err := strconv.ParseInt(eventIdStr, 0, 10)
+	if err != nil {
+		holmes.Error("id str[%s] error", eventIdStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	taskList, err := models.GetTaskInfoDetailList(eventId)
+	if err != nil {
+		holmes.Error("get task detail list error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = taskList
+}
+
 func (s *Server) getTaskDetail(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
