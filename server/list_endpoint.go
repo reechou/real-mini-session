@@ -226,7 +226,7 @@ func (s *Server) saveTask(c *gin.Context) {
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
-	if req.Task.Date != "" {
+	if req.Task.Date != "" || req.Task.Time != "" {
 		remindT, err := now.Parse(fmt.Sprintf("%s %s", req.Task.Date, req.Task.Time))
 		if err != nil {
 			holmes.Error("parse remind data and time error: %v", err)
@@ -344,7 +344,7 @@ func (s *Server) doneTask(c *gin.Context) {
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
-	if err = models.UpdateTask(&models.Task{ID: id, Status: TASK_STATUS_DONE}); err != nil {
+	if err = models.UpdateTaskStatus(&models.Task{ID: id, Status: TASK_STATUS_DONE}); err != nil {
 		holmes.Error("update task error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
