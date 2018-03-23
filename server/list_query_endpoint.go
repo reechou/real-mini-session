@@ -132,12 +132,14 @@ func (s *Server) getEventTaskMembers(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
-	membersRsp.TaskMembers, err = models.GetTaskMemberDetailList(taskId)
-	if err != nil {
-		holmes.Error("get task members error: %v", err)
-		rsp.Code = ERR_CODE_SYSTEM
-		rsp.Msg = ERR_MSG_SYSTEM
-		return
+	if taskId != 0 {
+		membersRsp.TaskMembers, err = models.GetTaskMemberDetailList(taskId)
+		if err != nil {
+			holmes.Error("get task members error: %v", err)
+			rsp.Code = ERR_CODE_SYSTEM
+			rsp.Msg = ERR_MSG_SYSTEM
+			return
+		}
 	}
 	rsp.Data = membersRsp
 }
