@@ -74,7 +74,7 @@ func (s *Server) Run() {
 	router.GET("/task/detail/:id", s.getTaskDetail)
 	router.GET("/task/done/:id", s.doneTask)
 	router.GET("/task/reopen/:id", s.reopenTask)
-
+	// event task members
 	router.GET("/event_task/members/:eventid/:taskid", s.getEventTaskMembers)
 
 	holmes.Infoln(router.Run(s.cfg.Host))
