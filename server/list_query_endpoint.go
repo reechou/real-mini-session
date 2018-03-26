@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-mini-session/models"
-	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/response"
 )
 
 func (s *Server) getList(c *gin.Context) {
@@ -117,7 +116,7 @@ func (s *Server) getListEventDetail(c *gin.Context) {
 		return
 	}
 
-	event := new(models.Event)
+	event := &models.Event{ID: id}
 
 	has, err := models.GetEvent(event)
 	if err != nil {
