@@ -197,6 +197,7 @@ func (s *Server) delShareEvent(c *gin.Context) {
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
+	holmes.Debug("del share event req: %+v", req)
 
 	var err error
 	if err = models.DelShareEvent(&models.ShareEvent{ID: req.ID}); err != nil {
