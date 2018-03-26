@@ -69,7 +69,7 @@ func (s *Server) Run() {
 	router.GET("/event/del/:id", s.delListEvent)
 	router.GET("/event/get/:listid", s.getListEvents)
 	router.GET("/event/share/get/:userid", s.getShareEvents)
-	router.GET("/event/share/del/:id", s.delShareEvent)
+	router.POST("/event/share/del", s.delShareEvent)
 	router.GET("/event/detail/:id", s.getListEventDetail)
 	router.POST("/event/addmember", s.createListEventMember)
 	router.GET("/event/delmember/:id", s.delListEventMember)

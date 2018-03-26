@@ -82,6 +82,17 @@ func DelEventMember(info *EventMember) error {
 	return nil
 }
 
+func DelEventMemberFromUserEvent(info *EventMember) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.Where("event_id = ?", info.EventId).And("user_id = ?", info.EventId).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 type ShareEvent struct {
 	ID        int64 `xorm:"pk autoincr" json:"id"`
 	UserId    int64 `xorm:"not null default 0 int index" json:"userId"`

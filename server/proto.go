@@ -51,3 +51,9 @@ type EventTaskMembersRsp struct {
 	EventMembers []models.EventMemberDetail `json:"eventMembers"`
 	TaskMembers  []models.TaskMemberDetail  `json:"taskMembers"`
 }
+
+type DelShareEventReq struct {
+	ID      int64 `json:"id"`
+	UserId  int64 `json:"userId"`
+	EventId int64 `json:"eventId"`
+}

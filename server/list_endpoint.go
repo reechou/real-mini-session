@@ -190,16 +190,23 @@ func (s *Server) delShareEvent(c *gin.Context) {
 		c.JSON(http.StatusOK, rsp)
 	}()
 
-	idStr := c.Param("id")
-	id, err := strconv.ParseInt(idStr, 0, 10)
-	if err != nil {
-		holmes.Error("del id str[%s] error", idStr)
+	var req DelShareEventReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		holmes.Error("bind json error: %v", err)
 		rsp.Code = ERR_CODE_PARAMS
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
-	if err = models.DelShareEvent(&models.ShareEvent{ID: id}); err != nil {
+
+	var err error
+	if err = models.DelShareEvent(&models.ShareEvent{ID: req.ID}); err != nil {
 		holmes.Error("del share event from id error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if err = models.DelEventMemberFromUserEvent(&models.EventMember{EventId: req.EventId, UserId: req.UserId}); err != nil {
+		holmes.Error("del event member from user-event error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
