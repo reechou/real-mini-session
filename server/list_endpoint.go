@@ -228,17 +228,30 @@ func (s *Server) createListEventMember(c *gin.Context) {
 		return
 	}
 
-	err := models.CreateEventMember(&req)
-	if err != nil {
-		holmes.Error("create event member error: %v", err)
-		rsp.Code = ERR_CODE_SYSTEM
-		rsp.Msg = ERR_MSG_SYSTEM
-		return
-	}
 	shareEvent := &models.ShareEvent{
 		UserId:  req.UserId,
 		EventId: req.EventId,
 	}
+	has, err := models.GetShareEventFromUser(shareEvent)
+	if err != nil {
+		holmes.Error("get share event error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if has {
+		holmes.Debug("user[%d] has this share event[%d]", req.UserId, req.EventId)
+		return
+	}
+
+	err = models.CreateEventMember(&req)
+	if err != nil {
+		holmes.Error("create share event error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+
 	if err = models.CreateShareEvent(shareEvent); err != nil {
 		holmes.Error("create share event error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM

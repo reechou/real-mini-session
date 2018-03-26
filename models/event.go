@@ -50,8 +50,8 @@ func UpdateEvent(info *Event) error {
 
 type EventMember struct {
 	ID        int64 `xorm:"pk autoincr" json:"id"`
-	EventId   int64 `xorm:"not null default 0 int unique(task_member)" json:"eventId"`
-	UserId    int64 `xorm:"not null default 0 int unique(task_member)" json:"userId"`
+	EventId   int64 `xorm:"not null default 0 int unique(event_member)" json:"eventId"`
+	UserId    int64 `xorm:"not null default 0 int unique(event_member)" json:"userId"`
 	CreatedAt int64 `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt int64 `xorm:"not null default 0 int" json:"-"`
 }
@@ -86,7 +86,7 @@ func DelEventMemberFromUserEvent(info *EventMember) error {
 	if info.EventId == 0 || info.UserId == 0 {
 		return fmt.Errorf("del userid or eventid cannot be nil.")
 	}
-	_, err := x.Where("event_id = ?", info.EventId).And("user_id = ?", info.EventId).Delete(info)
+	_, err := x.Where("event_id = ?", info.EventId).And("user_id = ?", info.UserId).Delete(info)
 	if err != nil {
 		return err
 	}
@@ -95,8 +95,8 @@ func DelEventMemberFromUserEvent(info *EventMember) error {
 
 type ShareEvent struct {
 	ID        int64 `xorm:"pk autoincr" json:"id"`
-	UserId    int64 `xorm:"not null default 0 int index" json:"userId"`
-	EventId   int64 `xorm:"not null default 0 int index" json:"eventId"`
+	UserId    int64 `xorm:"not null default 0 int unique(user_share_event)" json:"userId"`
+	EventId   int64 `xorm:"not null default 0 int unique(user_share_event)" json:"eventId"`
 	CreatedAt int64 `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt int64 `xorm:"not null default 0 int" json:"-"`
 }
