@@ -184,6 +184,28 @@ func (s *Server) delListEvent(c *gin.Context) {
 	}
 }
 
+func (s *Server) delShareEvent(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if err = models.DelShareEvent(&models.ShareEvent{ID: id}); err != nil {
+		holmes.Error("del share event from id error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+}
+
 func (s *Server) createListEventMember(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
@@ -201,6 +223,38 @@ func (s *Server) createListEventMember(c *gin.Context) {
 	err := models.CreateEventMember(&req)
 	if err != nil {
 		holmes.Error("create event member error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	shareEvent := &models.ShareEvent{
+		UserId:  req.UserId,
+		EventId: req.EventId,
+	}
+	if err = models.CreateShareEvent(shareEvent); err != nil {
+		holmes.Error("create share event error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+}
+
+func (s *Server) delListEventMember(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if err = models.DelEventMember(&models.EventMember{ID: id}); err != nil {
+		holmes.Error("del event member from id error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return

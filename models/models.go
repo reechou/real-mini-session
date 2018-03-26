@@ -36,6 +36,7 @@ func InitDB(cfg *config.Config) {
 		new(List),
 		new(ListTag),
 		new(Event),
+		new(ShareEvent),
 		new(EventMember),
 		new(Task),
 		new(TaskMember),

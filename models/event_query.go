@@ -39,3 +39,23 @@ func GetEventMemberDetailList(eventId int64) ([]EventMemberDetail, error) {
 	}
 	return eventMemberDetailList, nil
 }
+
+type ShareEventDetail struct {
+	ShareEvent `xorm:"extends" json:"shareEvent"`
+	Event      `xorm:"extends" json:"event"`
+}
+
+func (ShareEventDetail) TableName() string {
+	return "share_event"
+}
+
+func GetShareEventDetailList(userId int64) ([]ShareEventDetail, error) {
+	shareEventDetailList := make([]ShareEventDetail, 0)
+	err := x.Join("LEFT", "event", "share_event.event_id = event.id").
+		Where("share_event.user_id = ?", userId).
+		Find(&shareEventDetailList)
+	if err != nil {
+		return nil, err
+	}
+	return shareEventDetailList, nil
+}

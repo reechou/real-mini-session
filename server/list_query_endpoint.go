@@ -101,6 +101,31 @@ func (s *Server) getListEvents(c *gin.Context) {
 	rsp.Data = events
 }
 
+func (s *Server) getShareEvents(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	userIdStr := c.Param("userid")
+	userId, err := strconv.ParseInt(userIdStr, 0, 10)
+	if err != nil {
+		holmes.Error("user id str[%s] error", userIdStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	events, err := models.GetShareEventDetailList(userId)
+	if err != nil {
+		holmes.Error("get list event error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = events
+}
+
 func (s *Server) getListEventDetail(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
