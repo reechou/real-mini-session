@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-mini-session/models"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/callback/response"
 )
 
 func (s *Server) getList(c *gin.Context) {
@@ -99,6 +100,38 @@ func (s *Server) getListEvents(c *gin.Context) {
 		return
 	}
 	rsp.Data = events
+}
+
+func (s *Server) getListEventDetail(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	event := new(models.Event)
+
+	has, err := models.GetEvent(event)
+	if err != nil {
+		holmes.Error("get event detail error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if !has {
+		rsp.Code = ERR_CODE_NOT_FOUND
+		rsp.Msg = ERR_MSG_NOT_FOUND
+		return
+	}
+	rsp.Data = event
 }
 
 // list event task

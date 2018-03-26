@@ -49,7 +49,7 @@ func UpdateEvent(info *Event) error {
 }
 
 type EventMember struct {
-	ID        int64 `xorm:"pk autoincr"`
+	ID        int64 `xorm:"pk autoincr" json:"id"`
 	EventId   int64 `xorm:"not null default 0 int unique(task_member)" json:"eventId"`
 	UserId    int64 `xorm:"not null default 0 int unique(task_member)" json:"userId"`
 	CreatedAt int64 `xorm:"not null default 0 int" json:"createdAt"`

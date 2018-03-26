@@ -1,5 +1,16 @@
 package models
 
+func GetEvent(info *Event) (bool, error) {
+	has, err := x.Id(info.ID).Get(info)
+	if err != nil {
+		return false, err
+	}
+	if !has {
+		return false, nil
+	}
+	return true, nil
+}
+
 func GetListEvents(listId int64) ([]Event, error) {
 	var listEvents []Event
 	err := x.Where("list_id = ?", listId).Find(&listEvents)
