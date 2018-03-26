@@ -83,8 +83,8 @@ func DelEventMember(info *EventMember) error {
 }
 
 func DelEventMemberFromUserEvent(info *EventMember) error {
-	if info.ID == 0 {
-		return fmt.Errorf("del id cannot be nil.")
+	if info.EventId == 0 || info.UserId == 0 {
+		return fmt.Errorf("del userid or eventid cannot be nil.")
 	}
 	_, err := x.Where("event_id = ?", info.EventId).And("user_id = ?", info.EventId).Delete(info)
 	if err != nil {
