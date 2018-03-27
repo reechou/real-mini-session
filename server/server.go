@@ -13,6 +13,7 @@ import (
 type WxMiniInfo struct {
 	WxMini  *small.Wx
 	AppInfo *models.AppInfo
+	Wx      *Wechat
 }
 
 type Server struct {
@@ -43,6 +44,7 @@ func (s *Server) addWxMini(appinfo *models.AppInfo) *WxMiniInfo {
 	s.wxMiniMap[appinfo.AppId] = &WxMiniInfo{
 		WxMini:  small.NewWx(appinfo.AppId, appinfo.Secret),
 		AppInfo: appinfo,
+		Wx:      NewWechat(appinfo.AppId, appinfo.Secret),
 	}
 	return s.wxMiniMap[appinfo.AppId]
 }
@@ -58,6 +60,8 @@ func (s *Server) Run() {
 	router.GET("/", s.home)
 	router.GET("/mini/login", s.login)
 	router.GET("/mini/user", s.getUserInfo)
+
+	router.GET("/test/tpl", s.testTplMsg)
 
 	// list
 	router.POST("/list/save", s.saveList)

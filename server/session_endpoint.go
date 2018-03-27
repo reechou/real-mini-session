@@ -8,6 +8,8 @@ import (
 	"github.com/nanjishidu/wechat/small"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-mini-session/models"
+	"github.com/reechou/real-mini-session/wechat"
+	"gopkg.in/chanxuehong/wechat.v2/mp/message/template"
 )
 
 func (s *Server) home(c *gin.Context) {
@@ -129,4 +131,54 @@ func (s *Server) getUserInfo(c *gin.Context) {
 		return
 	}
 	rsp.Data = &UserInfo{UserInfo: sessionInfo}
+}
+
+func (s *Server) testTplMsg(c *gin.Context) {
+	rsp := &Response{}
+
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	appid := "wx7de642d41cc07693"
+	wxMini, ok := s.wxMiniMap[appid]
+	if !ok {
+		appinfo := &models.AppInfo{
+			AppId: appid,
+		}
+		has, err := models.GetAppInfo(appinfo)
+		if err != nil {
+			holmes.Error("get appinfo error: %v", err)
+			return
+		}
+		if !has {
+			holmes.Error("cannot found this appid: %s", appinfo)
+			return
+		}
+		wxMini = s.addWxMini(appinfo)
+	}
+	var userId int64 = 1
+	formids, err := models.GetTplFormids(userId)
+	if err != nil {
+		holmes.Error("get tpl formids error: %v", err)
+		return
+	}
+	if len(formids) == 0 {
+		holmes.Error("cannot get form ids")
+		return
+	}
+	wxMini.Wx.Send(&wechat.WechatTplMsg{
+		ToUser: formids[0].OpenId,
+		TplId:  "LUkzDc7cdMUSG1FZwjIyqJAbPP9G80l059SA9ivzUyI",
+		Page:   "pages/events/task/task?eventid=2",
+		FormId: formids[0].FormId,
+		Data: &wechat.TaskRemindTplMsg{
+			Keyword1: &template.DataItem{Value: "2018-4-2 18:00", Color: "#f76e6c"},
+			Keyword2: &template.DataItem{Value: "REE TEST TPL", Color: "#f76e6c"},
+		},
+	})
+	err = models.DelTplFormid(&formids[0])
+	if err != nil {
+		holmes.Error("del tpl form id error: %v", err)
+	}
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/reechou/holmes"
@@ -29,4 +30,24 @@ func CreateTplFormids(list []TplFormid) error {
 		return err
 	}
 	return nil
+}
+
+func DelTplFormid(info *TplFormid) error {
+	if info.ID == 0 {
+		return fmt.Errorf("del id cannot be nil.")
+	}
+	_, err := x.ID(info.ID).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetTplFormids(userId int64) ([]TplFormid, error) {
+	var formids []TplFormid
+	err := x.Where("user_id = ?", userId).Find(&formids)
+	if err != nil {
+		return nil, err
+	}
+	return formids, nil
 }
