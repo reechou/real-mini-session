@@ -126,3 +126,14 @@ func DelShareEvent(info *ShareEvent) error {
 	}
 	return nil
 }
+
+func DelShareEventFromUserEvent(info *ShareEvent) error {
+	if info.EventId == 0 || info.UserId == 0 {
+		return fmt.Errorf("del userid or eventid cannot be nil.")
+	}
+	_, err := x.Where("user_id = ?", info.UserId).And("event_id = ?", info.EventId).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
