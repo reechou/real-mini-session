@@ -57,3 +57,14 @@ type DelShareEventReq struct {
 	UserId  int64 `json:"userId"`
 	EventId int64 `json:"eventId"`
 }
+
+// form id
+type FormIdInfo struct {
+	FormId string `json:"formId"`
+	Expire int64  `json:"expire"`
+}
+type SaveFormIdsReq struct {
+	UserId  int64        `json:"userId"`
+	OpenId  string       `json:"openId"`
+	FormIds []FormIdInfo `json:"formIds"`
+}

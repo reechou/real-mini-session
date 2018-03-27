@@ -82,6 +82,8 @@ func (s *Server) Run() {
 	router.GET("/task/reopen/:id", s.reopenTask)
 	// event task members
 	router.GET("/event_task/members/:eventid/:taskid", s.getEventTaskMembers)
+	// form id
+	router.POST("/formid/save", s.saveFormIds)
 
 	holmes.Infoln(router.Run(s.cfg.Host))
 }

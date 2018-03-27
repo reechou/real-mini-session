@@ -1,9 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
-	"fmt"
 	"github.com/reechou/holmes"
 )
 

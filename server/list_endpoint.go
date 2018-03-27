@@ -448,3 +448,35 @@ func (s *Server) reopenTask(c *gin.Context) {
 		return
 	}
 }
+
+// form id
+func (s *Server) saveFormIds(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	var req SaveFormIdsReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		holmes.Error("bind json error: %v", err)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	formIds := make([]models.TplFormid, len(req.FormIds))
+	for i := 0; i < len(req.FormIds); i++ {
+		formIds[i] = models.TplFormid{
+			UserId: req.UserId,
+			OpenId: req.OpenId,
+			FormId: req.FormIds[i].FormId,
+			Expire: req.FormIds[i].Expire,
+		}
+	}
+	if err := models.CreateTplFormids(formIds); err != nil {
+		holmes.Error("save form ids error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+}
