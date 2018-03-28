@@ -78,7 +78,9 @@ func (s *Server) Run() {
 		holmes.DebugLevel).Stop()
 
 	gin.SetMode(gin.ReleaseMode)
-	router := gin.Default()
+	router := gin.New()
+	router.Use(gin.Recovery())
+	//router := gin.Default()
 
 	router.GET("/", s.home)
 	router.GET("/mini/login", s.login)
