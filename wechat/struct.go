@@ -22,7 +22,7 @@ type TaskDoneTplMsg struct {
 type TaskRemindTplMsg struct {
 	Keyword1 *template.DataItem `json:"keyword1"`
 	Keyword2 *template.DataItem `json:"keyword2"`
-	Keyword3 *template.DataItem `json:"keyword2"`
+	Keyword3 *template.DataItem `json:"keyword3"`
 }
 
 type TaskReceiveTplMsg struct {
