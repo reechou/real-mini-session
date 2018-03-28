@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/now"
@@ -314,6 +315,7 @@ func (s *Server) saveTask(c *gin.Context) {
 		if req.Task.Time == "" {
 			remindTimeStr = req.Task.Date
 		} else if req.Task.Date == "" {
+			req.Task.Date = time.Now().Format("2006-01-02")
 			remindTimeStr = req.Task.Time
 		} else {
 			remindTimeStr = fmt.Sprintf("%s %s", req.Task.Date, req.Task.Time)
