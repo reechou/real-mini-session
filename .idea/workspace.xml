@@ -38,8 +38,8 @@
       <file leaf-file-name="list_endpoint.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/list_endpoint.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="314" column="69" lean-forward="false" selection-start-line="314" selection-start-column="69" selection-end-line="314" selection-end-column="69" />
+            <state relative-caret-position="448">
+              <caret line="318" column="26" lean-forward="false" selection-start-line="318" selection-start-column="26" selection-end-line="318" selection-end-column="26" />
               <folding>
                 <element signature="e#16#186#0" expanded="true" />
               </folding>
@@ -697,8 +697,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/list_endpoint.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="314" column="69" lean-forward="false" selection-start-line="314" selection-start-column="69" selection-end-line="314" selection-end-column="69" />
+        <state relative-caret-position="448">
+          <caret line="318" column="26" lean-forward="false" selection-start-line="318" selection-start-column="26" selection-end-line="318" selection-end-column="26" />
           <folding>
             <element signature="e#16#186#0" expanded="true" />
           </folding>

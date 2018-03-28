@@ -310,7 +310,14 @@ func (s *Server) saveTask(c *gin.Context) {
 		return
 	}
 	if req.Task.Date != "" || req.Task.Time != "" {
-		remindTimeStr := fmt.Sprintf("%s %s", req.Task.Date, req.Task.Time)
+		remindTimeStr := ""
+		if req.Task.Time == "" {
+			remindTimeStr = req.Task.Date
+		} else if req.Task.Date == "" {
+			remindTimeStr = req.Task.Time
+		} else {
+			remindTimeStr = fmt.Sprintf("%s %s", req.Task.Date, req.Task.Time)
+		}
 		remindT, err := now.Parse(remindTimeStr)
 		holmes.Debug("remind time str: %s %v", remindTimeStr, remindT)
 		if err != nil {
