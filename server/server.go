@@ -77,6 +77,7 @@ func (s *Server) Run() {
 		holmes.AlsoStdout,
 		holmes.DebugLevel).Stop()
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
 	router.GET("/", s.home)
