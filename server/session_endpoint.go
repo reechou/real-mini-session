@@ -140,6 +140,8 @@ func (s *Server) testTplMsg(c *gin.Context) {
 		c.JSON(http.StatusOK, rsp)
 	}()
 
+	return
+
 	appid := "wx7de642d41cc07693"
 	wxMini, ok := s.wxMiniMap[appid]
 	if !ok {
