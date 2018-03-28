@@ -337,6 +337,10 @@ func (s *Server) saveTask(c *gin.Context) {
 			rsp.Msg = ERR_MSG_SYSTEM
 			return
 		}
+		// send tpl msg
+		for i := 0; i < len(taskMembers); i++ {
+			s.lr.TaskReceive(&req.Task, taskMembers[i].UserId)
+		}
 	} else {
 		err = models.UpdateTask(&req.Task)
 		if err != nil {
@@ -376,6 +380,9 @@ func (s *Server) saveTask(c *gin.Context) {
 				rsp.Code = ERR_CODE_SYSTEM
 				rsp.Msg = ERR_MSG_SYSTEM
 				return
+			}
+			for i := 0; i < len(newAddMembers); i++ {
+				s.lr.TaskReceive(&req.Task, newAddMembers[i].UserId)
 			}
 		}
 		for k, v := range oldMembers {
