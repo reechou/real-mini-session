@@ -381,8 +381,16 @@ func (s *Server) saveTask(c *gin.Context) {
 				rsp.Msg = ERR_MSG_SYSTEM
 				return
 			}
-			for i := 0; i < len(newAddMembers); i++ {
-				s.lr.TaskReceive(&req.Task, newAddMembers[i].UserId)
+			task := &models.Task{ID: req.Task.ID}
+			has, err := models.GetTask(task)
+			if err != nil {
+				holmes.Error("get task error: %v", err)
+			} else {
+				if has {
+					for i := 0; i < len(newAddMembers); i++ {
+						s.lr.TaskReceive(task, newAddMembers[i].UserId)
+					}
+				}
 			}
 		}
 		for k, v := range oldMembers {
