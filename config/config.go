@@ -15,12 +15,21 @@ type DBInfo struct {
 	DBName string
 }
 
+type ListRemind struct {
+	ListRemindCron   string
+	RemindTaskTplId  string
+	ReceiveTaskTplId string
+	DoneTaskTplId    string
+}
+
 type Config struct {
 	Debug     bool
 	Path      string
 	Host      string
 	Version   string
 	IfShowSql bool
+
+	ListRemind
 
 	DBInfo
 }

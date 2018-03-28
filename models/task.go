@@ -63,6 +63,7 @@ type TaskMember struct {
 	ID        int64 `xorm:"pk autoincr"`
 	TaskId    int64 `xorm:"not null default 0 int unique(task_member)" json:"taskId"`
 	UserId    int64 `xorm:"not null default 0 int unique(task_member)" json:"userId"`
+	IfNotify  int64 `xorm:"not null default 0 int" json:"ifNotify"`
 	CreatedAt int64 `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt int64 `xorm:"not null default 0 int" json:"-"`
 }

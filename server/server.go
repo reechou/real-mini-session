@@ -19,6 +19,8 @@ type WxMiniInfo struct {
 type Server struct {
 	cfg *config.Config
 
+	lr *ListReminder
+
 	sync.Mutex
 	wxMiniMap map[string]*WxMiniInfo
 }
@@ -35,6 +37,26 @@ func NewServer(cfg *config.Config) *Server {
 
 func (s *Server) init() {
 	models.InitDB(s.cfg)
+
+	// list remind
+	listAppid := "wx7de642d41cc07693"
+	wxMini, ok := s.wxMiniMap[listAppid]
+	if !ok {
+		appinfo := &models.AppInfo{
+			AppId: listAppid,
+		}
+		has, err := models.GetAppInfo(appinfo)
+		if err != nil {
+			holmes.Error("get appinfo error: %v", err)
+			return
+		}
+		if !has {
+			holmes.Error("cannot found this appid: %s", appinfo)
+			return
+		}
+		wxMini = s.addWxMini(appinfo)
+	}
+	s.lr = NewListReminder(s.cfg, wxMini.Wx)
 }
 
 func (s *Server) addWxMini(appinfo *models.AppInfo) *WxMiniInfo {

@@ -11,6 +11,15 @@ func GetTask(info *Task) (bool, error) {
 	return true, nil
 }
 
+func GetRemindTaskList(start, end int64) ([]Task, error) {
+	var tasks []Task
+	err := x.Where("status = 0").And("remind_time >= ?", start).And("remind_time <= ?", end).Find(&tasks)
+	if err != nil {
+		return nil, err
+	}
+	return tasks, nil
+}
+
 func GetTaskMemberList(taskId int64) ([]TaskMember, error) {
 	var taskMembers []TaskMember
 	err := x.Where("task_id = ?", taskId).Find(&taskMembers)

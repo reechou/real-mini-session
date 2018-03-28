@@ -433,6 +433,16 @@ func (s *Server) doneTask(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
+	task := &models.Task{ID: id}
+	has, err := models.GetTask(task)
+	if err != nil {
+		holmes.Error("get task error: %v", err)
+		return
+	}
+	if !has {
+		return
+	}
+	s.lr.TaskDone(task)
 }
 
 func (s *Server) reopenTask(c *gin.Context) {

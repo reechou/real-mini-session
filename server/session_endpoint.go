@@ -172,9 +172,10 @@ func (s *Server) testTplMsg(c *gin.Context) {
 		TplId:  "LUkzDc7cdMUSG1FZwjIyqJAbPP9G80l059SA9ivzUyI",
 		Page:   "pages/events/task/task?eventid=2",
 		FormId: formids[0].FormId,
-		Data: &wechat.TaskRemindTplMsg{
-			Keyword1: &template.DataItem{Value: "2018-4-2 18:00", Color: "#f76e6c"},
-			Keyword2: &template.DataItem{Value: "REE TEST TPL", Color: "#f76e6c"},
+		Data: &wechat.TaskDoneTplMsg{
+			Keyword1: &template.DataItem{Value: "REE TEST TPL", Color: "#f76e6c"},
+			Keyword2: &template.DataItem{Value: "2018-4-2 18:00", Color: "#f76e6c"},
+			Keyword3: &template.DataItem{Value: "REE 完成任务", Color: "#f76e6c"},
 		},
 	})
 	err = models.DelTplFormid(&formids[0])

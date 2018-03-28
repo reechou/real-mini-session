@@ -43,6 +43,14 @@ func DelTplFormid(info *TplFormid) error {
 	return nil
 }
 
+func DelExpireTplFormids(userId, expire int64) error {
+	_, err := x.Where("user_id = ?", userId).And("expire <= ?", expire).Delete(&TplFormid{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetTplFormids(userId int64) ([]TplFormid, error) {
 	var formids []TplFormid
 	err := x.Where("user_id = ?", userId).Find(&formids)
