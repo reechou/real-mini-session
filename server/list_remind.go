@@ -110,6 +110,10 @@ func (lr *ListReminder) TaskReceive(t *models.Task, userId int64) {
 	if !has {
 		createUser.NickName = "私人助手"
 	}
+	remindTime := "暂未定截止时间"
+	if t.RemindTime != 0 {
+		remindTime = time.Unix(t.RemindTime, 0).Format("2006.01.02 15:04") + " 截止"
+	}
 	tplMsg := &wechat.WechatTplMsg{
 		ToUser: formid.OpenId,
 		TplId:  lr.cfg.ReceiveTaskTplId,
@@ -125,7 +129,7 @@ func (lr *ListReminder) TaskReceive(t *models.Task, userId int64) {
 				Color: "#008B8B",
 			},
 			Keyword3: &template.DataItem{
-				Value: time.Unix(t.RemindTime, 0).Format("2006.01.02 15:04") + " 截止",
+				Value: remindTime,
 				Color: "#008B8B",
 			},
 			Keyword4: &template.DataItem{
@@ -150,10 +154,15 @@ func (lr *ListReminder) Run() {
 }
 
 func (lr *ListReminder) runRemind() {
+	lr.runTimeRemind(1800, "将于半小时后到期")
+	lr.runTimeRemind(86400, "将于一天后到期")
+}
+
+func (lr *ListReminder) runTimeRemind(a int64, remark string) {
 	start := now.BeginningOfMinute().Unix()
 	end := now.EndOfMinute().Unix()
-	start += 1800
-	end += 1800
+	start += a
+	end += a
 	holmes.Debug("run remind start: %d end: %d", start, end)
 
 	tasks, err := models.GetRemindTaskList(start, end)
@@ -192,7 +201,7 @@ func (lr *ListReminder) runRemind() {
 						Color: "#008B8B",
 					},
 					Keyword3: &template.DataItem{
-						Value: "将于半小时后截止",
+						Value: remark,
 						Color: "#008B8B",
 					},
 				},
