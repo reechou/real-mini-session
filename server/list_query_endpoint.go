@@ -99,7 +99,7 @@ func (s *Server) getListEvents(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
-	var eventMap map[int64]*models.Event
+	eventMap := make(map[int64]*models.Event)
 	for i := 0; i < len(eventsTasks); i++ {
 		if _, ok := eventMap[eventsTasks[i].Event.ID]; !ok {
 			eventMap[eventsTasks[i].Event.ID] = &eventsTasks[i].Event
