@@ -14,6 +14,8 @@ type Event struct {
 	Name        string `xorm:"not null default '' varchar(128)" json:"name"`
 	CreatedAt   int64  `xorm:"not null default 0 int" json:"createdAt"`
 	UpdatedAt   int64  `xorm:"not null default 0 int" json:"-"`
+
+	TaskNum int64 `json:"taskNum"`
 }
 
 func CreateEvent(info *Event) error {

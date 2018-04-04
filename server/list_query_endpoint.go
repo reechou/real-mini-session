@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/miekg/dns"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-mini-session/models"
 )
@@ -91,14 +92,37 @@ func (s *Server) getListEvents(c *gin.Context) {
 		return
 	}
 
-	events, err := models.GetListEvents(listId)
+	eventsTasks, err := models.GetEventTaskDetailList(listId)
 	if err != nil {
+		holmes.Error("get list event task detail error: %v", err)
 		holmes.Error("get list event error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
+	var eventMap map[int64]*models.Event
+	for i := 0; i < len(eventsTasks); i++ {
+		if _, ok := eventMap[eventsTasks[i].Event.ID]; !ok {
+			eventMap[eventsTasks[i].Event.ID] = &eventsTasks[i].Event
+			eventMap[eventsTasks[i].Event.ID].TaskNum = 1
+		} else {
+			eventMap[eventsTasks[i].Event.ID].TaskNum++
+		}
+	}
+	events := make([]*models.Event, 0)
+	for _, v := range eventMap {
+		events = append(events, v)
+	}
 	rsp.Data = events
+
+	//events, err := models.GetListEvents(listId)
+	//if err != nil {
+	//	holmes.Error("get list event error: %v", err)
+	//	rsp.Code = ERR_CODE_SYSTEM
+	//	rsp.Msg = ERR_MSG_SYSTEM
+	//	return
+	//}
+	//rsp.Data = events
 }
 
 func (s *Server) getShareEvents(c *gin.Context) {
