@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/miekg/dns"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-mini-session/models"
 )

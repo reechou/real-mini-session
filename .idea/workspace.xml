@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05de2379-f88d-4b68-8787-fb30315e4089" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/models/event.go" afterPath="$PROJECT_DIR$/models/event.go" />
-      <change beforePath="$PROJECT_DIR$/models/event_query.go" afterPath="$PROJECT_DIR$/models/event_query.go" />
       <change beforePath="$PROJECT_DIR$/server/list_query_endpoint.go" afterPath="$PROJECT_DIR$/server/list_query_endpoint.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -106,8 +104,8 @@
       <file leaf-file-name="list_query_endpoint.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/list_query_endpoint.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="115" column="21" lean-forward="false" selection-start-line="115" selection-start-column="21" selection-end-line="115" selection-end-column="21" />
+            <state relative-caret-position="126">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -691,8 +689,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/list_query_endpoint.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="115" column="21" lean-forward="false" selection-start-line="115" selection-start-column="21" selection-end-line="115" selection-end-column="21" />
+        <state relative-caret-position="126">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
