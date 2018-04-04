@@ -340,3 +340,34 @@ func (s *Server) getTaskTags(c *gin.Context) {
 		rsp.Data = tags
 	}
 }
+
+func (s *Server) getEventAndTaskTags(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	var req EventTaskTagsReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		holmes.Error("bind json error: %v", err)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	var err error
+	result := new(EventTaskTagsRsp)
+	if result.EventTags, err = models.GetEventTaskTagList(req.EventId); err != nil {
+		holmes.Error("get event task tags error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if result.TaskTags, err = models.GetTaskTagDetailList(req.TaskId); err != nil {
+		holmes.Error("get task tags error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = result
+}

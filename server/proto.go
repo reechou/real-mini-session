@@ -52,6 +52,16 @@ type EventTaskMembersRsp struct {
 	TaskMembers  []models.TaskMemberDetail  `json:"taskMembers"`
 }
 
+type EventTaskTagsReq struct {
+	EventId int64 `json:"eventId"`
+	TaskId  int64 `json:"taskId"`
+}
+
+type EventTaskTagsRsp struct {
+	TaskTags  []models.TaskTagDetail `json:"taskTags"`
+	EventTags []models.EventTaskTag  `json:"eventTags"`
+}
+
 type DelShareEventReq struct {
 	ID      int64 `json:"id"`
 	UserId  int64 `json:"userId"`
