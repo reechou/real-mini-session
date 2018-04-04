@@ -117,7 +117,7 @@ func (s *Server) Run() {
 	router.GET("/tag/event/del/:id", s.delEventTaskTag)
 	router.GET("/tag/task/del/:id", s.delTaskTag)
 	router.GET("/tag/event/get/:eventid", s.getEventTaskTags)
-	router.GET("/tag/event/get/:taskid", s.getTaskTags)
+	router.GET("/tag/task/get/:taskid", s.getTaskTags)
 	// form id
 	router.POST("/formid/save", s.saveFormIds)
 
