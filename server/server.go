@@ -111,6 +111,13 @@ func (s *Server) Run() {
 	router.GET("/task/reopen/:id", s.reopenTask)
 	// event task members
 	router.GET("/event_task/members/:eventid/:taskid", s.getEventTaskMembers)
+	// event task tag
+	router.POST("/tag/event/save", s.createEventTaskTag)
+	router.POST("/tag/task/save", s.createTaskTag)
+	router.GET("/tag/event/del/:id", s.delEventTaskTag)
+	router.GET("/tag/task/del/:id", s.delTaskTag)
+	router.GET("/tag/event/get/:eventid", s.getEventTaskTags)
+	router.GET("/tag/event/get/:taskid", s.getTaskTags)
 	// form id
 	router.POST("/formid/save", s.saveFormIds)
 

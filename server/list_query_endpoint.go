@@ -291,3 +291,52 @@ func (s *Server) getEventTaskMembers(c *gin.Context) {
 	}
 	rsp.Data = membersRsp
 }
+
+// task tag
+func (s *Server) getEventTaskTags(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("eventid")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if tags, err := models.GetEventTaskTagList(id); err != nil {
+		holmes.Error("get event task tags error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	} else {
+		rsp.Data = tags
+	}
+}
+
+func (s *Server) getTaskTags(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	idStr := c.Param("taskid")
+	id, err := strconv.ParseInt(idStr, 0, 10)
+	if err != nil {
+		holmes.Error("del id str[%s] error", idStr)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+	if tags, err := models.GetTaskTagDetailList(id); err != nil {
+		holmes.Error("get task tags error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	} else {
+		rsp.Data = tags
+	}
+}

@@ -29,6 +29,35 @@ func GetTaskMemberList(taskId int64) ([]TaskMember, error) {
 	return taskMembers, nil
 }
 
+func GetEventTaskTagList(eventId int64) ([]EventTaskTag, error) {
+	var taskTags []EventTaskTag
+	err := x.Where("event_id = ?", eventId).Find(&taskTags)
+	if err != nil {
+		return nil, err
+	}
+	return taskTags, nil
+}
+
+type TaskTagDetail struct {
+	TaskTag      `xorm:"extends" json:"taskTag"`
+	EventTaskTag `xorm:"extends" json:"eventTaskTag"`
+}
+
+func (TaskTagDetail) TableName() string {
+	return "task_tag"
+}
+
+func GetTaskTagDetailList(taskId int64) ([]TaskTagDetail, error) {
+	tasktagDetailList := make([]TaskTagDetail, 0)
+	err := x.Join("LEFT", "event_task_tag", "task_tag.event_task_tag_id = event_task_tag.id").
+		Where("task_tag.task_id = ?", taskId).
+		Find(&tasktagDetailList)
+	if err != nil {
+		return nil, err
+	}
+	return tasktagDetailList, nil
+}
+
 type TaskMemberDetail struct {
 	TaskMember  `xorm:"extends" json:"taskMember"`
 	SessionInfo `xorm:"extends" json:"user"`
