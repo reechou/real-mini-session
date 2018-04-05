@@ -114,6 +114,7 @@ func (s *Server) Run() {
 	// event task tag
 	router.POST("/tag/event/save", s.createEventTaskTag)
 	router.POST("/tag/task/save", s.createTaskTag)
+	router.POST("/tag/task/savelist", s.createTaskTagList)
 	router.GET("/tag/event/del/:id", s.delEventTaskTag)
 	router.GET("/tag/task/del/:id", s.delTaskTag)
 	router.GET("/tag/event/get/:eventid", s.getEventTaskTags)
