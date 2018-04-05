@@ -38,6 +38,15 @@ func GetEventTaskTagList(eventId int64) ([]EventTaskTag, error) {
 	return taskTags, nil
 }
 
+func GetTasksFromEventTags(tags []int64) ([]TaskTag, error) {
+	var taskTags []TaskTag
+	err := x.In("event_task_tag_id", tags).Find(&taskTags)
+	if err != nil {
+		return nil, err
+	}
+	return taskTags, nil
+}
+
 type TaskTagDetail struct {
 	TaskTag      `xorm:"extends" json:"taskTag"`
 	EventTaskTag `xorm:"extends" json:"eventTaskTag"`

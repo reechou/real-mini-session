@@ -300,6 +300,30 @@ func (s *Server) getEventTaskMembers(c *gin.Context) {
 }
 
 // task tag
+func (s *Server) getTasksFromEventTags(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	var req GetTasksFromTagsReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		holmes.Error("bind json error: %v", err)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	list, err := models.GetTasksFromEventTags(req.EventTagIds)
+	if err != nil {
+		holmes.Error("get tasks from event tags error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = list
+}
+
 func (s *Server) getEventTaskTags(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
