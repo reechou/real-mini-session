@@ -63,7 +63,7 @@ type EventTaskTagsRsp struct {
 }
 
 type GetTasksFromTagsReq struct {
-	EventTagIds []int64
+	EventTagIds []int64 `json:"eventTagIds"`
 }
 
 type DelShareEventReq struct {
