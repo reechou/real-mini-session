@@ -109,8 +109,13 @@ func (s *Server) getListEvents(c *gin.Context) {
 		}
 	}
 	events := make([]*models.Event, 0)
-	for _, v := range eventMap {
-		events = append(events, v)
+	var keys []int64
+	for k := range eventMap {
+		keys = append(keys, k)
+		//events = append(events, v)
+	}
+	for _, k := range keys {
+		events = append(events, eventMap[k])
 	}
 	rsp.Data = events
 
