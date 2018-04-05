@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"sort"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -109,13 +110,14 @@ func (s *Server) getListEvents(c *gin.Context) {
 		}
 	}
 	events := make([]*models.Event, 0)
-	var keys []int64
+	var keys []int
 	for k := range eventMap {
-		keys = append(keys, k)
+		keys = append(keys, int(k))
 		//events = append(events, v)
 	}
+	sort.Ints(keys)
 	for _, k := range keys {
-		events = append(events, eventMap[k])
+		events = append(events, eventMap[int64(k)])
 	}
 	rsp.Data = events
 
