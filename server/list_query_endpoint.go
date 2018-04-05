@@ -376,5 +376,6 @@ func (s *Server) getEventAndTaskTags(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
+	holmes.Debug("result: %v %v", req, result)
 	rsp.Data = result
 }
