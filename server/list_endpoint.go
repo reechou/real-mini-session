@@ -348,6 +348,7 @@ func (s *Server) saveTask(c *gin.Context) {
 			rsp.Msg = ERR_MSG_SYSTEM
 			return
 		}
+		rsp.Data = req.Task
 		// send tpl msg
 		for i := 0; i < len(taskMembers); i++ {
 			s.lr.TaskReceive(&req.Task, taskMembers[i].UserId)
