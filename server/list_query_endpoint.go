@@ -104,8 +104,9 @@ func (s *Server) getListEvents(c *gin.Context) {
 	for i := 0; i < len(eventsTasks); i++ {
 		if _, ok := eventMap[eventsTasks[i].Event.ID]; !ok {
 			eventMap[eventsTasks[i].Event.ID] = &eventsTasks[i].Event
-			eventMap[eventsTasks[i].Event.ID].TaskNum = 1
-		} else {
+			eventMap[eventsTasks[i].Event.ID].TaskNum = 0
+		}
+		if eventsTasks[i].Task.Status == TASK_STATUS_NOT_DONE {
 			eventMap[eventsTasks[i].Event.ID].TaskNum++
 		}
 	}
