@@ -91,6 +91,14 @@ func DelTaskTag(info *TaskTag) error {
 	return nil
 }
 
+func DelTaskTagFromEventTag(info *TaskTag) error {
+	_, err := x.Where("event_task_tag_id = ?", info.EventTaskTagId).Delete(info)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 type EventTaskTag struct {
 	ID        int64  `xorm:"pk autoincr" json:"id"`
 	EventId   int64  `xorm:"not null default 0 int index" json:"eventId"`

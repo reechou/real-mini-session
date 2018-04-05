@@ -538,6 +538,12 @@ func (s *Server) delEventTaskTag(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
+	if err = models.DelTaskTagFromEventTag(&models.TaskTag{EventTaskTagId: id}); err != nil {
+		holmes.Error("del task tag from event tag id error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
 }
 
 func (s *Server) createTaskTag(c *gin.Context) {
