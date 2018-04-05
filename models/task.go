@@ -80,6 +80,22 @@ func CreateTaskTag(info *TaskTag) error {
 	return nil
 }
 
+func CreateTaskTags(tags []TaskTag) error {
+	if len(tags) == 0 {
+		return nil
+	}
+	now := time.Now().Unix()
+	for i := 0; i < len(tags); i++ {
+		tags[i].CreatedAt = now
+	}
+	_, err := x.Insert(&tags)
+	if err != nil {
+		holmes.Error("create task tag list error: %v", err)
+		return err
+	}
+	return nil
+}
+
 func DelTaskTag(info *TaskTag) error {
 	if info.ID == 0 {
 		return fmt.Errorf("del id cannot be nil.")

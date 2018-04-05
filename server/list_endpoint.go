@@ -570,6 +570,30 @@ func (s *Server) createTaskTag(c *gin.Context) {
 	rsp.Data = req
 }
 
+func (s *Server) createTaskTagList(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	var req []models.TaskTag
+	if err := c.ShouldBindJSON(&req); err != nil {
+		holmes.Error("bind json error: %v", err)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	var err error
+	if err = models.CreateTaskTags(req); err != nil {
+		holmes.Error("create task tag list error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = req
+}
+
 func (s *Server) delTaskTag(c *gin.Context) {
 	rsp := &Response{}
 	defer func() {
