@@ -120,7 +120,7 @@ func (s *Server) getListEvents(c *gin.Context) {
 	for _, k := range keys {
 		events = append(events, eventMap[int64(k)])
 	}
-	holmes.Debug("list[%d] has event: %v", events)
+	holmes.Debug("list[%d] has event: %v", listId, events)
 	rsp.Data = events
 
 	//events, err := models.GetListEvents(listId)
