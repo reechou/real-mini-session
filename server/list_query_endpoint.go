@@ -106,7 +106,7 @@ func (s *Server) getListEvents(c *gin.Context) {
 			eventMap[eventsTasks[i].Event.ID] = &eventsTasks[i].Event
 			eventMap[eventsTasks[i].Event.ID].TaskNum = 0
 		}
-		if eventsTasks[i].Task.Status == TASK_STATUS_NOT_DONE {
+		if eventsTasks[i].Task.ID != 0 && eventsTasks[i].Task.Status == TASK_STATUS_NOT_DONE {
 			eventMap[eventsTasks[i].Event.ID].TaskNum++
 		}
 	}
@@ -118,7 +118,7 @@ func (s *Server) getListEvents(c *gin.Context) {
 	}
 	sort.Ints(keys)
 	for _, k := range keys {
-		holmes.Debug("list[%d] has event: %v", listId, eventMap[int64(k)])
+		//holmes.Debug("list[%d] has event: %v", listId, eventMap[int64(k)])
 		events = append(events, eventMap[int64(k)])
 	}
 	rsp.Data = events
