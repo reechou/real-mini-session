@@ -72,7 +72,18 @@ func (s *Server) createComment(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
-	rsp.Data = req
+	user := models.SessionInfo{ID: req.UserId}
+	has, err := models.GetSessionInfoFromId(&user)
+	if err != nil {
+		holmes.Error("get session info from id error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if !has {
+		return
+	}
+	rsp.Data = models.TaskCommentDetail{TaskComment: req, SessionInfo: user}
 }
 
 func (s *Server) getCommentList(c *gin.Context) {
