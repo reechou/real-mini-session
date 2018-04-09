@@ -40,7 +40,7 @@ func (s *Server) createAssignMoment(task *models.Task, oprUser, assignUser int64
 		TaskId:  task.ID,
 		UserId:  oprUser,
 		OprType: MOMENT_OPR_TYPE_ASSIGN_TASK,
-		Detail:  fmt.Sprintf("将任务 【%s】 指派给：%s", task.Name, user.NickName),
+		Detail:  fmt.Sprintf("将任务【%s】指派给：%s", task.Name, user.NickName),
 	})
 }
 
