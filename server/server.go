@@ -110,6 +110,7 @@ func (s *Server) Run() {
 	router.GET("/task/done/:id", s.doneTask)
 	router.GET("/task/reopen/:id", s.reopenTask)
 	router.POST("/task/get/fromtags", s.getTasksFromEventTags)
+	router.POST("/task/get/fromtime", s.getTasksFromTime)
 	// event task members
 	router.GET("/event_task/members/:eventid/:taskid", s.getEventTaskMembers)
 	// event task tag
@@ -123,6 +124,10 @@ func (s *Server) Run() {
 	router.POST("/tag/event/task", s.getEventAndTaskTags)
 	// form id
 	router.POST("/formid/save", s.saveFormIds)
+	// comment, moment
+	router.POST("/comment/save", s.createComment)
+	router.POST("/comment/get", s.getCommentList)
+	router.POST("/moment/get", s.getMomentList)
 
 	holmes.Infoln(router.Run(s.cfg.Host))
 }

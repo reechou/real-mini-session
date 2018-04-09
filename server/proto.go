@@ -62,6 +62,22 @@ type EventTaskTagsRsp struct {
 	EventTags []models.EventTaskTag  `json:"eventTags"`
 }
 
+type EventQueryReq struct {
+	EventId int64 `json:"eventId"`
+	Offset  int   `json:"offset"`
+	Num     int   `json:"num"`
+}
+
+type GetTasksFromTimeReq struct {
+	UserId   int64 `json:"userId"`
+	TimeType int64 `json:"timeType"`
+}
+
+type GetTasksFromTimeRsp struct {
+	OwnerTasks []models.TaskEventDetail      `json:"ownerTasks"`
+	ShareTasks []models.ShareEventTaskDetail `json:"shareTasks"`
+}
+
 type GetTasksFromTagsReq struct {
 	EventTagIds []int64 `json:"eventTagIds"`
 }

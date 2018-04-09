@@ -43,6 +43,8 @@ func InitDB(cfg *config.Config) {
 		new(TaskTag),
 		new(EventTaskTag),
 		new(TplFormid),
+		new(TaskComment),
+		new(TaskMoment),
 	); err != nil {
 		holmes.Fatal("Fail to sync database: %v", err)
 	}

@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/now"
 	"github.com/reechou/holmes"
 	"github.com/reechou/real-mini-session/models"
 )
@@ -255,6 +256,52 @@ func (s *Server) getTaskDetail(c *gin.Context) {
 		return
 	}
 	rsp.Data = response
+}
+
+const (
+	GET_TASK_TIME_TYPE_ONE_DAY = iota
+	GET_TASK_TIME_TYPE_ONE_WEEK
+)
+
+func (s *Server) getTasksFromTime(c *gin.Context) {
+	rsp := &Response{}
+	defer func() {
+		c.JSON(http.StatusOK, rsp)
+	}()
+
+	var req GetTasksFromTimeReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		holmes.Error("bind json error: %v", err)
+		rsp.Code = ERR_CODE_PARAMS
+		rsp.Msg = ERR_MSG_PARAMS
+		return
+	}
+
+	var start, end int64
+	switch req.TimeType {
+	case GET_TASK_TIME_TYPE_ONE_DAY:
+		start = now.BeginningOfDay().Unix()
+		end = now.EndOfDay().Unix()
+	case GET_TASK_TIME_TYPE_ONE_WEEK:
+		start = now.BeginningOfWeek().Unix()
+		end = now.EndOfWeek().Unix()
+	}
+
+	result := new(GetTasksFromTimeRsp)
+	var err error
+	if result.OwnerTasks, err = models.GetTaskEventDetailList(req.UserId, start, end); err != nil {
+		holmes.Error("get tasks event list error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if result.ShareTasks, err = models.GetShareEventTaskDetailList(req.UserId, start, end); err != nil {
+		holmes.Error("get share event task list error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	rsp.Data = result
 }
 
 // event task members

@@ -10,7 +10,7 @@ import (
 type Task struct {
 	ID         int64  `xorm:"pk autoincr" json:"id"`
 	EventId    int64  `xorm:"not null default 0 int index" json:"eventId"`
-	CreateUser int64  `xorm:"not null default 0 int" json:"createUser"`
+	CreateUser int64  `xorm:"not null default 0 int index" json:"createUser"`
 	Name       string `xorm:"not null default '' varchar(128)" json:"name"`
 	Date       string `xorm:"not null default '' varchar(128)" json:"date"`
 	Time       string `xorm:"not null default '' varchar(128)" json:"time"`

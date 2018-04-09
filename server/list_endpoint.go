@@ -303,8 +303,20 @@ func (s *Server) saveTask(c *gin.Context) {
 		c.JSON(http.StatusOK, rsp)
 	}()
 
+	var err error
+
+	useridStr := c.GetHeader("userid")
+	userid, err := strconv.ParseInt(useridStr, 0, 10)
+	if err != nil {
+		holmes.Error("get user id from header error: %s", useridStr)
+	}
+	if userid == 0 {
+		holmes.Debug("header userid == 0")
+	}
+	holmes.Debug("header userid %d", userid)
+
 	var req OprTaskReq
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err = c.ShouldBindJSON(&req); err != nil {
 		holmes.Error("bind json error: %v", err)
 		rsp.Code = ERR_CODE_PARAMS
 		rsp.Msg = ERR_MSG_PARAMS
@@ -328,7 +340,7 @@ func (s *Server) saveTask(c *gin.Context) {
 			req.Task.RemindTime = remindT.Unix()
 		}
 	}
-	var err error
+
 	if req.Task.ID == 0 {
 		err = models.CreateTask(&req.Task)
 		if err != nil {
@@ -336,6 +348,13 @@ func (s *Server) saveTask(c *gin.Context) {
 			rsp.Code = ERR_CODE_SYSTEM
 			return
 		}
+		s.createMoment(&models.TaskMoment{
+			EventId: req.Task.EventId,
+			TaskId:  req.Task.ID,
+			UserId:  req.Task.CreateUser,
+			OprType: MOMENT_OPR_TYPE_CREATE_TASK,
+			Detail:  req.Task.Name,
+		})
 		taskMembers := make([]models.TaskMember, len(req.Members))
 		for i := 0; i < len(req.Members); i++ {
 			taskMembers[i].TaskId = req.Task.ID
@@ -352,6 +371,7 @@ func (s *Server) saveTask(c *gin.Context) {
 		// send tpl msg
 		for i := 0; i < len(taskMembers); i++ {
 			s.lr.TaskReceive(&req.Task, taskMembers[i].UserId)
+			s.createAssignMoment(&req.Task, userid, taskMembers[i].UserId)
 		}
 	} else {
 		err = models.UpdateTask(&req.Task)
@@ -401,6 +421,7 @@ func (s *Server) saveTask(c *gin.Context) {
 				if has {
 					for i := 0; i < len(newAddMembers); i++ {
 						s.lr.TaskReceive(task, newAddMembers[i].UserId)
+						s.createAssignMoment(task, userid, newAddMembers[i].UserId)
 					}
 				}
 			}
@@ -432,12 +453,42 @@ func (s *Server) delTask(c *gin.Context) {
 		rsp.Msg = ERR_MSG_PARAMS
 		return
 	}
-	if err = models.DelTask(&models.Task{ID: id}); err != nil {
+
+	task := &models.Task{ID: id}
+	has, err := models.GetTask(task)
+	if err != nil {
+		holmes.Error("get task error: %v", err)
+		rsp.Code = ERR_CODE_SYSTEM
+		rsp.Msg = ERR_MSG_SYSTEM
+		return
+	}
+	if !has {
+		return
+	}
+	if err = models.DelTask(task); err != nil {
 		holmes.Error("del task from id error: %v", err)
 		rsp.Code = ERR_CODE_SYSTEM
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
+
+	useridStr := c.GetHeader("userid")
+	userid, err := strconv.ParseInt(useridStr, 0, 10)
+	if err != nil {
+		holmes.Error("get user id error: %s", useridStr)
+		return
+	}
+	if userid == 0 {
+		holmes.Debug("header userid == 0")
+		return
+	}
+	s.createMoment(&models.TaskMoment{
+		EventId: task.EventId,
+		TaskId:  task.ID,
+		UserId:  userid,
+		OprType: MOMENT_OPR_TYPE_DELETE_TASK,
+		Detail:  task.Name,
+	})
 }
 
 func (s *Server) doneTask(c *gin.Context) {
@@ -470,6 +521,24 @@ func (s *Server) doneTask(c *gin.Context) {
 		return
 	}
 	s.lr.TaskDone(task)
+
+	useridStr := c.GetHeader("userid")
+	userid, err := strconv.ParseInt(useridStr, 0, 10)
+	if err != nil {
+		holmes.Error("get user id error: %s", useridStr)
+		return
+	}
+	if userid == 0 {
+		holmes.Debug("header userid == 0")
+		return
+	}
+	s.createMoment(&models.TaskMoment{
+		EventId: task.EventId,
+		TaskId:  task.ID,
+		UserId:  userid,
+		OprType: MOMENT_OPR_TYPE_DONE_TASK,
+		Detail:  task.Name,
+	})
 }
 
 func (s *Server) reopenTask(c *gin.Context) {
@@ -492,6 +561,33 @@ func (s *Server) reopenTask(c *gin.Context) {
 		rsp.Msg = ERR_MSG_SYSTEM
 		return
 	}
+
+	task := &models.Task{ID: id}
+	has, err := models.GetTask(task)
+	if err != nil {
+		holmes.Error("get task error: %v", err)
+		return
+	}
+	if !has {
+		return
+	}
+	useridStr := c.GetHeader("userid")
+	userid, err := strconv.ParseInt(useridStr, 0, 10)
+	if err != nil {
+		holmes.Error("get user id error: %s", useridStr)
+		return
+	}
+	if userid == 0 {
+		holmes.Debug("header userid == 0")
+		return
+	}
+	s.createMoment(&models.TaskMoment{
+		EventId: task.EventId,
+		TaskId:  task.ID,
+		UserId:  userid,
+		OprType: MOMENT_OPR_TYPE_REOPEN_TASK,
+		Detail:  task.Name,
+	})
 }
 
 // task tag
