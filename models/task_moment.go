@@ -14,7 +14,7 @@ type TaskMoment struct {
 	OprType   int64  `xorm:"not null default 0 int index" json:"oprType"`
 	OprInfo   string `xorm:"not null default '' varchar(128)" json:"oprInfo"`
 	Detail    string `xorm:"not null default '' varchar(512)" json:"detail"`
-	CreatedAt int64  `xorm:"not null default 0 int" json:"createdAt"`
+	CreatedAt int64  `xorm:"not null default 0 int index" json:"createdAt"`
 	UpdatedAt int64  `xorm:"not null default 0 int" json:"-"`
 }
 

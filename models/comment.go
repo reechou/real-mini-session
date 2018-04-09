@@ -11,7 +11,7 @@ type TaskComment struct {
 	EventId   int64  `xorm:"not null default 0 int index" json:"eventId"`
 	UserId    int64  `xorm:"not null default 0 int index" json:"userId"`
 	Comment   string `xorm:"not null default '' varchar(512)" json:"comment"`
-	CreatedAt int64  `xorm:"not null default 0 int" json:"createdAt"`
+	CreatedAt int64  `xorm:"not null default 0 int index" json:"createdAt"`
 	UpdatedAt int64  `xorm:"not null default 0 int" json:"-"`
 }
 
