@@ -12,7 +12,7 @@ func (TaskCommentDetail) TableName() string {
 func GetTaskCommentDetailList(eventId int64, offset, num int) ([]TaskCommentDetail, error) {
 	taskCommentDetailList := make([]TaskCommentDetail, 0)
 	err := x.Join("LEFT", "session_info", "task_comment.user_id = session_info.id").
-		Where("task_comment.event_id = ?", eventId).Decr("task_comment.created_at").Limit(num, offset).
+		Where("task_comment.event_id = ?", eventId).Desc("task_comment.created_at").Limit(num, offset).
 		Find(&taskCommentDetailList)
 	if err != nil {
 		return nil, err
