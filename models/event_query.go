@@ -105,7 +105,7 @@ func GetShareEventTaskDetailList(userId int64, start, end int64) ([]ShareEventTa
 	shareEventTaskDetailList := make([]ShareEventTaskDetail, 0)
 	err := x.Join("LEFT", "event", "share_event.event_id = event.id").
 		Join("LEFT", "task", "event.id = task.event_id").
-		Where("share_event.user_id = ? AND task.remind_time >= ? AND task.remind_time <= ?", userId, start, end).
+		Where("share_event.user_id = ? AND task.status = 0 AND task.remind_time >= ? AND task.remind_time <= ?", userId, start, end).
 		Find(&shareEventTaskDetailList)
 	if err != nil {
 		return nil, err
