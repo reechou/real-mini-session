@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05de2379-f88d-4b68-8787-fb30315e4089" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/models/event_query.go" afterPath="$PROJECT_DIR$/models/event_query.go" />
-      <change beforePath="$PROJECT_DIR$/models/task_query.go" afterPath="$PROJECT_DIR$/models/task_query.go" />
+      <change beforePath="$PROJECT_DIR$/server/list_query_endpoint.go" afterPath="$PROJECT_DIR$/server/list_query_endpoint.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="task_query.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="task_query.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/task_query.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="617">
-              <caret line="123" column="52" lean-forward="true" selection-start-line="123" selection-start-column="52" selection-end-line="123" selection-end-column="52" />
+            <state relative-caret-position="563">
+              <caret line="120" column="20" lean-forward="true" selection-start-line="120" selection-start-column="20" selection-end-line="120" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -27,8 +26,8 @@
       <file leaf-file-name="server.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="112" column="52" lean-forward="true" selection-start-line="112" selection-start-column="52" selection-end-line="112" selection-end-column="52" />
+            <state relative-caret-position="438">
+              <caret line="114" column="66" lean-forward="true" selection-start-line="114" selection-start-column="66" selection-end-line="114" selection-end-column="66" />
               <folding>
                 <element signature="e#16#224#0" expanded="true" />
               </folding>
@@ -36,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list_query_endpoint.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="list_query_endpoint.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/list_query_endpoint.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="610">
-              <caret line="297" column="57" lean-forward="false" selection-start-line="297" selection-start-column="57" selection-end-line="297" selection-end-column="57" />
+            <state relative-caret-position="224">
+              <caret line="279" column="29" lean-forward="false" selection-start-line="279" selection-start-column="29" selection-end-line="279" selection-end-column="29" />
               <folding>
                 <element signature="e#16#187#0" expanded="true" />
               </folding>
@@ -159,7 +158,6 @@
         <option value="$PROJECT_DIR$/models/models.go" />
         <option value="$PROJECT_DIR$/models/task.go" />
         <option value="$PROJECT_DIR$/server/proto.go" />
-        <option value="$PROJECT_DIR$/server/list_query_endpoint.go" />
         <option value="$PROJECT_DIR$/server/server.go" />
         <option value="$PROJECT_DIR$/server/list_endpoint.go" />
         <option value="$PROJECT_DIR$/models/comment.go" />
@@ -169,6 +167,7 @@
         <option value="$PROJECT_DIR$/server/moment_endpoint.go" />
         <option value="$PROJECT_DIR$/models/event_query.go" />
         <option value="$PROJECT_DIR$/models/task_query.go" />
+        <option value="$PROJECT_DIR$/server/list_query_endpoint.go" />
       </list>
     </option>
   </component>
@@ -661,16 +660,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/server.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="112" column="52" lean-forward="true" selection-start-line="112" selection-start-column="52" selection-end-line="112" selection-end-column="52" />
-          <folding>
-            <element signature="e#16#224#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/proto.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
@@ -687,16 +676,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/list_query_endpoint.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="610">
-          <caret line="297" column="57" lean-forward="false" selection-start-line="297" selection-start-column="57" selection-end-line="297" selection-end-column="57" />
-          <folding>
-            <element signature="e#16#187#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/event_query.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="639">
@@ -705,11 +684,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="114" column="66" lean-forward="true" selection-start-line="114" selection-start-column="66" selection-end-line="114" selection-end-column="66" />
+          <folding>
+            <element signature="e#16#224#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/models/task_query.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="617">
-          <caret line="123" column="52" lean-forward="true" selection-start-line="123" selection-start-column="52" selection-end-line="123" selection-end-column="52" />
+        <state relative-caret-position="563">
+          <caret line="120" column="20" lean-forward="true" selection-start-line="120" selection-start-column="20" selection-end-line="120" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/list_query_endpoint.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="279" column="29" lean-forward="false" selection-start-line="279" selection-start-column="29" selection-end-line="279" selection-end-column="29" />
+          <folding>
+            <element signature="e#16#187#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -277,6 +277,7 @@ func (s *Server) getTasksFromTime(c *gin.Context) {
 		return
 	}
 
+	now.FirstDayMonday = true
 	var start, end int64
 	switch req.TimeType {
 	case GET_TASK_TIME_TYPE_ONE_DAY:
