@@ -121,7 +121,7 @@ func (TaskEventDetail) TableName() string {
 func GetTaskEventDetailList(userId, start, end int64) ([]TaskEventDetail, error) {
 	taskEventList := make([]TaskEventDetail, 0)
 	err := x.Join("LEFT", "event", "task.event_id = event.id").
-		Where("task.create_user = ? AND task.status = 0 AND task.remind_time >= ? AND task.remind_time <= ?", userId, start, end).
+		Where("event.owner_user_id = ? AND task.status = 0 AND task.remind_time >= ? AND task.remind_time <= ?", userId, start, end).
 		Find(&taskEventList)
 	if err != nil {
 		return nil, err
